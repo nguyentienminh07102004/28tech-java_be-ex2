@@ -39,4 +39,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(errorResponeDTO, HttpStatus.BAD_GATEWAY);
   }
 
+  @ExceptionHandler(NumberFormatException.class)
+  public ResponseEntity<Object> numberFormatException(NumberFormatException ex, WebRequest request) {
+    ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO();
+    errorResponeDTO.setError(ex.getMessage());
+    List<String> details = new ArrayList<>();
+    details.add("Số liệu không hợp lệ !");
+    errorResponeDTO.setDateils(details);
+    return new ResponseEntity<>(errorResponeDTO, HttpStatus.BAD_REQUEST);
+  }
 }

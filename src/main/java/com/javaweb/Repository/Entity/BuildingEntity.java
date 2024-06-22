@@ -29,7 +29,14 @@ public class BuildingEntity {
   private String image;
   private String managerName;
   private String managerPhoneNumber;
+  private String rentArea;
 
+  public String getRentArea() {
+    return rentArea;
+  }
+  public void setRentArea(String rentArea) {
+    this.rentArea = rentArea;
+  }
   public String getName() {
     return name;
   }
