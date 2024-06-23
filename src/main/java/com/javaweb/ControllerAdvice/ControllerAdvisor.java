@@ -1,5 +1,6 @@
 package com.javaweb.ControllerAdvice;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,31 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     List<String> details = new ArrayList<>();
     details.add("Số liệu không hợp lệ !");
     errorResponeDTO.setDateils(details);
+    errorResponeDTO.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    errorResponeDTO.setStatus("BAD_REQUEST");
     return new ResponseEntity<>(errorResponeDTO, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(SQLException.class)
+  public ResponseEntity<Object> SQLExceptionHandler(SQLException ex, WebRequest request) {
+    ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO();
+    errorResponeDTO.setError(ex.getMessage());
+    List<String> details = new ArrayList<>();
+    details.add("SQL có lỗi");
+    errorResponeDTO.setDateils(details);
+    errorResponeDTO.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    errorResponeDTO.setStatus("BAD_REQUEST");
+    return new ResponseEntity<Object>(errorResponeDTO, HttpStatus.BAD_REQUEST);
+  }
+
+  public ResponseEntity<Object> ClassNotFoundExceptionHandler(ClassNotFoundException ex, WebRequest request) {
+    ErrorResponeDTO errorResponeDTO = new ErrorResponeDTO();
+    errorResponeDTO.setError(ex.getMessage());
+    List<String> details = new ArrayList<>();
+    details.add("Driver có lỗi!");
+    errorResponeDTO.setDateils(details);
+    errorResponeDTO.setTimestamp(new Timestamp(System.currentTimeMillis()));
+    errorResponeDTO.setStatus("INTERNAL_SERVER_ERROR");
+    return new ResponseEntity<>(errorResponeDTO, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
