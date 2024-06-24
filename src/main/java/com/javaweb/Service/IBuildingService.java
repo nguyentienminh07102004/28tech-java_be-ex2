@@ -7,6 +7,6 @@ import java.util.Map;
 import com.javaweb.model.BuildingDTO;
 
 public interface IBuildingService {
-  List<BuildingDTO> findAll(Map<String, String> params, List<String> typeCode)
-      throws SQLException, NumberFormatException, ClassNotFoundException;
+	List<BuildingDTO> findAll(Map<String, String> params, List<String> typeCode)
+		throws SQLException, NumberFormatException, ClassNotFoundException;
 }

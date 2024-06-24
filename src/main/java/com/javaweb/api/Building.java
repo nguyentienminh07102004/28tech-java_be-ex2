@@ -14,11 +14,11 @@ import com.javaweb.model.BuildingDTO;
 @RestController
 public class Building {
 
-  @Autowired
-  private IBuildingService buildingService;
+	@Autowired
+	private IBuildingService buildingService;
 
-  @GetMapping(value="/api/building/")
-  public List<BuildingDTO> findAll(@RequestParam(value = "typeCode", required = false) List<String> typeCode, @RequestParam Map<String, String> params) throws SQLException, ClassNotFoundException, NumberFormatException {
-    return buildingService.findAll(params, typeCode);
-  }
+	@GetMapping(value="/api/building/")
+	public List<BuildingDTO> findAll(@RequestParam(value = "typeCode", required = false) List<String> typeCode, @RequestParam Map<String, String> params) throws SQLException, ClassNotFoundException, NumberFormatException {
+	return buildingService.findAll(params, typeCode);
+	}
 }
