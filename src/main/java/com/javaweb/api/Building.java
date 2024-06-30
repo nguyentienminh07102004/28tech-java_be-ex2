@@ -19,6 +19,6 @@ public class Building {
 
 	@GetMapping(value="/api/building/")
 	public List<BuildingDTO> findAll(@RequestParam(value = "typeCode", required = false) List<String> typeCode, @RequestParam Map<String, String> params) throws SQLException, ClassNotFoundException, NumberFormatException {
-	return buildingService.findAll(params, typeCode);
+		return buildingService.findAll(params, typeCode);
 	}
 }
