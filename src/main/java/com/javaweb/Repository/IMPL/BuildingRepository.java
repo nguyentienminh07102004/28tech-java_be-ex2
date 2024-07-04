@@ -1,59 +1,40 @@
 package com.javaweb.Repository.IMPL;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
+
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.Builder.BuildingSearchBuilder;
 import com.javaweb.Repository.IBuildingRepository;
 import com.javaweb.Repository.Entity.BuildingEntity;
-import com.javaweb.Utils.ConnectionJDBC;
 import com.javaweb.Utils.validateDataInput;
 
 @Repository
+@Transactional
+@Primary
 public class BuildingRepository implements IBuildingRepository {
 
-  @Override
-  public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
-	try {
-		StringBuilder sql = new StringBuilder("SELECT b.id, b.name, b.districtid, b.street, b.floorarea, b.ward, b.numberOfBasement, b.managerName, b.managerPhoneNumber, ");
-		sql.append("b.rentprice, b.servicefee, b.brokeragefee FROM building b ");
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
+		StringBuilder sql = new StringBuilder("SELECT * FROM building b ");
 		joinTable(buildingSearchBuilder, sql);
 		where_condition_normal(buildingSearchBuilder, sql);
 		where_condition_special(sql, buildingSearchBuilder);
-		Connection connection = ConnectionJDBC.getConnection();
-		PreparedStatement statement = connection.prepareStatement(sql.toString());
-		System.out.println(sql.toString());
-		ResultSet resultSet = statement.executeQuery();
-		List<BuildingEntity> results = new ArrayList<BuildingEntity>();
-		while(resultSet.next()) {
-			BuildingEntity buildingEntity = new BuildingEntity();
-			buildingEntity.setId(resultSet.getLong("id"));
-			buildingEntity.setName(resultSet.getString("name"));
-			buildingEntity.setStreet(resultSet.getString("street"));
-			buildingEntity.setWard(resultSet.getString("ward"));
-			buildingEntity.setServiceFee(resultSet.getString("servicefee"));
-			buildingEntity.setBrokerageFee(resultSet.getString("brokeragefee"));
-			buildingEntity.setDistrictId(resultSet.getLong("districtid"));
-			buildingEntity.setRentPrice(resultSet.getInt("rentprice"));
-			buildingEntity.setFloorArea(resultSet.getInt("floorArea"));
-			buildingEntity.setManagerName(resultSet.getString("managername"));
-			buildingEntity.setManagerPhoneNumber(resultSet.getString("managerphonenumber"));
-			results.add(buildingEntity);
-		}
-		return results;
-	} catch (SQLException ex) {
-		System.err.println(ex.getMessage());
-		return null;
+		Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+		return query.getResultList();
 	}
-  }
 
   private void joinTable(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
     if(buildingSearchBuilder.getTypeCode() != null && !buildingSearchBuilder.getTypeCode().isEmpty()) {
