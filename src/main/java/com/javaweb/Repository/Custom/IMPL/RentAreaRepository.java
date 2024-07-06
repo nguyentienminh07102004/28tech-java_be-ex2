@@ -1,4 +1,4 @@
-package com.javaweb.Repository.IMPL;
+package com.javaweb.Repository.Custom.IMPL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.javaweb.Repository.IRentAreaRepository;
+import com.javaweb.Repository.Custom.IRentAreaRepositoryCustomer;
 import com.javaweb.Repository.Entity.RentAreaEntity;
 import com.javaweb.Utils.ConnectionJDBC;
 
 @Repository
-public class RentAreaRepository implements IRentAreaRepository {
+public class RentAreaRepository implements IRentAreaRepositoryCustomer {
 
 	@Override
 	public List<RentAreaEntity> findByBuildingId(Long id) {

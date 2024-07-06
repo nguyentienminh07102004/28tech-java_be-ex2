@@ -1,9 +1,10 @@
 package com.javaweb.Repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.javaweb.Repository.Custom.IRentAreaRepositoryCustomer;
 import com.javaweb.Repository.Entity.RentAreaEntity;
 
-public interface IRentAreaRepository {
-	List<RentAreaEntity> findByBuildingId(Long id);
+public interface IRentAreaRepository extends JpaRepository<RentAreaEntity, Long>, IRentAreaRepositoryCustomer {
+	
 }

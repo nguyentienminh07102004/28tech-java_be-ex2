@@ -1,10 +1,10 @@
 package com.javaweb.Repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.javaweb.Builder.BuildingSearchBuilder;
+import com.javaweb.Repository.Custom.IBuildingRepositoryCustomer;
 import com.javaweb.Repository.Entity.BuildingEntity;
 
-public interface IBuildingRepository {
-  List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder);
+public interface IBuildingRepository extends JpaRepository<BuildingEntity, Long>, IBuildingRepositoryCustomer {
+	
 }

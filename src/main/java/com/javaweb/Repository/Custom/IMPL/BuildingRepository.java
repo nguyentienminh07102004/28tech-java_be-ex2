@@ -1,4 +1,4 @@
-package com.javaweb.Repository.IMPL;
+package com.javaweb.Repository.Custom.IMPL;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.Builder.BuildingSearchBuilder;
-import com.javaweb.Repository.IBuildingRepository;
+import com.javaweb.Repository.Custom.IBuildingRepositoryCustomer;
 import com.javaweb.Repository.Entity.BuildingEntity;
 import com.javaweb.Utils.validateDataInput;
 
 @Repository
 @Transactional
 @Primary
-public class BuildingRepository implements IBuildingRepository {
+public class BuildingRepository implements IBuildingRepositoryCustomer {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -28,7 +28,7 @@ public class BuildingRepository implements IBuildingRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM building b ");
+		StringBuilder sql = new StringBuilder("SELECT b.* FROM building b ");
 		joinTable(buildingSearchBuilder, sql);
 		where_condition_normal(buildingSearchBuilder, sql);
 		where_condition_special(sql, buildingSearchBuilder);
@@ -36,7 +36,7 @@ public class BuildingRepository implements IBuildingRepository {
 		return query.getResultList();
 	}
 
-  private void joinTable(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
+  	private void joinTable(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
     if(buildingSearchBuilder.getTypeCode() != null && !buildingSearchBuilder.getTypeCode().isEmpty()) {
 		sql.append(" INNER JOIN buildingrenttype ON buildingrenttype.buildingId = b.id ");
 		sql.append(" INNER JOIN renttype ON renttype.id = buildingrenttype.renttypeId ");
@@ -46,7 +46,7 @@ public class BuildingRepository implements IBuildingRepository {
 	}
   }
 
-  private void where_condition_normal(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
+  	private void where_condition_normal(BuildingSearchBuilder buildingSearchBuilder, StringBuilder sql) {
 	sql.append(" WHERE 1 = 1 ");
 	try{
 		Field[] feilds = BuildingSearchBuilder.class.getDeclaredFields();
@@ -83,7 +83,7 @@ public class BuildingRepository implements IBuildingRepository {
 	}
   }
 
-  private void where_condition_special(StringBuilder sql, BuildingSearchBuilder buildingSearchBuilder) {
+  	private void where_condition_special(StringBuilder sql, BuildingSearchBuilder buildingSearchBuilder) {
 	Integer areaFrom = buildingSearchBuilder.getAreaFrom();
 	Integer areaTo = buildingSearchBuilder.getAreaTo();
 	if(areaFrom != null || areaTo != null) {
@@ -103,4 +103,5 @@ public class BuildingRepository implements IBuildingRepository {
 	}
 	sql.append(" GROUP BY b.id");
   }
+
 }
